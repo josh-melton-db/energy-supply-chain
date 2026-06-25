@@ -1,0 +1,137 @@
+{
+  "version": 2,
+  "config": {
+    "sample_questions": [
+      {
+        "question": ["Show me carbon intensity by region"]
+      },
+      {
+        "question": ["What is our take-or-pay gap by contract?"]
+      },
+      {
+        "question": ["Which lanes have the lowest days to zero?"]
+      },
+      {
+        "question": ["Which lane has the highest landed cost?"]
+      },
+      {
+        "question": ["Which lane has the highest average cost?"]
+      },
+      {
+        "question": ["What is the operating margin by asset this month?"]
+      },
+      {
+        "question": ["How many vibration incidents hit the Upper Texas Coast this quarter?"]
+      },
+      {
+        "question": ["Which vendor has the fastest ETA for NGL near Corpus Christi?"]
+      },
+      {
+        "question": ["Show average work order resolution time by asset"]
+      }
+    ]
+  },
+  "data_sources": {
+    "metric_views": [
+      {"identifier": "demos.industrials_optimization.consumption_metrics"},
+      {"identifier": "demos.industrials_optimization.contract_metrics"},
+      {"identifier": "demos.industrials_optimization.production_metrics"},
+      {"identifier": "demos.industrials_optimization.financial_metrics"},
+      {"identifier": "demos.industrials_optimization.forecast_metrics"},
+      {"identifier": "demos.industrials_optimization.profitability_metrics"},
+      {"identifier": "demos.industrials_optimization.incident_metrics"},
+      {"identifier": "demos.industrials_optimization.maintenance_metrics"},
+      {"identifier": "demos.industrials_optimization.vendor_metrics"}
+    ]
+  },
+  "instructions": {
+    "text_instructions": [
+      {
+        "id": "01f0b37c378e1c9100000000000000a1",
+        "content": [
+          "Lane cost semantics: For lane questions about 'cost', 'average cost', or 'highest cost', use Total Landed Cost Per Ton from consumption_metrics (supply + distribution cost). ",
+          "Contract Price USD in contract_metrics is the selling price (what the customer pays), NOT landed cost. Do not use it for 'which lane has the highest cost' questions. ",
+          "profitability_metrics.Lane Cost is allocated cost in USD, not per-ton. For per-ton cost ranking, use consumption_metrics.Total Landed Cost Per Ton."
+        ]
+      }
+    ],
+    "example_question_sqls": [
+      {
+        "id": "01f0821116d912db00000000000000b1",
+        "question": ["Which lane has the highest landed cost?"],
+        "sql": [
+          "SELECT `Lane ID`, `Asset Name`, `Customer Name`, MEASURE(`Total Landed Cost Per Ton`) AS total_landed_cost_per_ton\n",
+          "FROM demos.industrials_optimization.consumption_metrics\n",
+          "GROUP BY `Lane ID`, `Asset Name`, `Customer Name`\n",
+          "ORDER BY MEASURE(`Total Landed Cost Per Ton`) DESC\n",
+          "LIMIT 1"
+        ]
+      },
+      {
+        "id": "01f099751a3a1df300000000000000b2",
+        "question": ["Which lane has the highest average cost?"],
+        "sql": [
+          "SELECT `Lane ID`, `Asset Name`, `Customer Name`, MEASURE(`Total Landed Cost Per Ton`) AS total_landed_cost_per_ton\n",
+          "FROM demos.industrials_optimization.consumption_metrics\n",
+          "GROUP BY `Lane ID`, `Asset Name`, `Customer Name`\n",
+          "ORDER BY MEASURE(`Total Landed Cost Per Ton`) DESC\n",
+          "LIMIT 1"
+        ]
+      }
+    ]
+  },
+  "benchmarks": {
+    "questions": [
+      {
+        "id": "01f0b37c378e1c9100000000000000c1",
+        "question": ["Which lane has the highest landed cost?"],
+        "answer": [{"format": "SQL", "content": ["SELECT `Lane ID`, `Asset Name`, `Customer Name`, MEASURE(`Total Landed Cost Per Ton`) AS total_landed_cost_per_ton\n", "FROM demos.industrials_optimization.consumption_metrics\n", "GROUP BY `Lane ID`, `Asset Name`, `Customer Name`\n", "ORDER BY MEASURE(`Total Landed Cost Per Ton`) DESC\n", "LIMIT 1"]}]
+      },
+      {
+        "id": "01f0b37c378e1c9100000000000000c2",
+        "question": ["Which lanes have the lowest days to zero?"],
+        "answer": [{"format": "SQL", "content": ["SELECT `Lane ID`, `Customer Name`, MEASURE(`Days to Zero Operational`) AS days_to_zero\n", "FROM demos.industrials_optimization.consumption_metrics\n", "GROUP BY `Lane ID`, `Customer Name`\n", "ORDER BY MEASURE(`Days to Zero Operational`) ASC NULLS LAST\n", "LIMIT 10"]}]
+      },
+      {
+        "id": "01f0b37c378e1c9100000000000000c3",
+        "question": ["Show me carbon intensity by region"],
+        "answer": [{"format": "SQL", "content": ["SELECT `Region`, MEASURE(`Carbon Intensity`) AS carbon_intensity_kg_per_ton\n", "FROM demos.industrials_optimization.production_metrics\n", "GROUP BY `Region`\n", "ORDER BY carbon_intensity_kg_per_ton DESC"]}]
+      },
+      {
+        "id": "01f0b37c378e1c9100000000000000c4",
+        "question": ["What is our take-or-pay gap by contract?"],
+        "answer": [{"format": "SQL", "content": ["SELECT `Lane ID`, `Contract ID`, MEASURE(`Take-or-Pay Gap`) AS take_or_pay_gap_usd\n", "FROM demos.industrials_optimization.contract_metrics\n", "GROUP BY `Lane ID`, `Contract ID`\n", "ORDER BY take_or_pay_gap_usd DESC"]}]
+      },
+      {
+        "id": "01f0b37c378e1c9100000000000000c5",
+        "question": ["What is the operating margin by asset this month?"],
+        "answer": [{"format": "SQL", "content": ["SELECT `Asset ID`, MEASURE(`Operating Margin`) AS operating_margin_pct\n", "FROM demos.industrials_optimization.financial_metrics\n", "WHERE `Month` >= DATE_TRUNC('MONTH', CURRENT_DATE())\n", "GROUP BY `Asset ID`, `Month`\n", "ORDER BY operating_margin_pct DESC"]}]
+      },
+      {
+        "id": "01f0b37c378e1c9100000000000000c6",
+        "question": ["How many vibration incidents hit the Upper Texas Coast this quarter?"],
+        "answer": [{"format": "SQL", "content": ["SELECT MEASURE(`Incident Count`) AS incident_count\n", "FROM demos.industrials_optimization.incident_metrics\n", "WHERE `Region` = 'Upper Texas Coast' AND `Incident Type` = 'vibration_anomaly'\n", "AND `Date` >= DATE_TRUNC('QUARTER', CURRENT_DATE())"]}]
+      },
+      {
+        "id": "01f0b37c378e1c9100000000000000c7",
+        "question": ["Which lanes have the largest supply-demand discrepancy?"],
+        "answer": [{"format": "SQL", "content": ["SELECT `Lane ID`, MEASURE(`Supply/Demand Discrepancy`) AS discrepancy_tpd, MEASURE(`Forecast Discrepancy Pct`) AS discrepancy_pct\n", "FROM demos.industrials_optimization.forecast_metrics\n", "GROUP BY `Lane ID`\n", "ORDER BY ABS(MEASURE(`Supply/Demand Discrepancy`)) DESC\n", "LIMIT 10"]}]
+      },
+      {
+        "id": "01f0b37c378e1c9100000000000000c8",
+        "question": ["Show average work order resolution time by asset"],
+        "answer": [{"format": "SQL", "content": ["SELECT `Asset ID`, `Asset Name`, MEASURE(`Avg Resolution Days`) AS avg_resolution_days\n", "FROM demos.industrials_optimization.maintenance_metrics\n", "GROUP BY `Asset ID`, `Asset Name`\n", "ORDER BY avg_resolution_days DESC"]}]
+      },
+      {
+        "id": "01f0b37c378e1c9100000000000000c9",
+        "question": ["Which vendor has the fastest ETA?"],
+        "answer": [{"format": "SQL", "content": ["SELECT `Vendor Name`, MEASURE(`Avg ETA Hours`) AS avg_eta_hours\n", "FROM demos.industrials_optimization.vendor_metrics\n", "GROUP BY `Vendor Name`\n", "ORDER BY avg_eta_hours ASC\n", "LIMIT 1"]}]
+      },
+      {
+        "id": "01f0b37c378e1c9100000000000000ca",
+        "question": ["Which lanes are most profitable?"],
+        "answer": [{"format": "SQL", "content": ["SELECT `Lane ID`, MEASURE(`Lane Margin Pct`) AS lane_margin_pct, MEASURE(`Lane Margin USD`) AS lane_margin_usd\n", "FROM demos.industrials_optimization.profitability_metrics\n", "GROUP BY `Lane ID`\n", "ORDER BY MEASURE(`Lane Margin Pct`) DESC\n", "LIMIT 10"]}]
+      }
+    ]
+  }
+}

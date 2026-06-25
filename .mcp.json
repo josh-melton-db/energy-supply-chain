@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "databricks": {
+      "command": "${DATABRICKS_MCP_PYTHON:-python}",
+      "args": ["${DATABRICKS_MCP_SERVER:-databricks-mcp-server}"],
+      "defer_loading": true,
+      "env": {"DATABRICKS_CONFIG_PROFILE": "${DATABRICKS_CONFIG_PROFILE:-DEFAULT}"}
+    }
+  }
+}

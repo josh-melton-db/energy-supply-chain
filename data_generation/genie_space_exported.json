@@ -1,0 +1,49 @@
+{
+  "version": 2,
+  "config": {
+    "sample_questions": [
+      {
+        "question": [
+          "Show me carbon intensity by region"
+        ]
+      },
+      {
+        "question": [
+          "What is our take-or-pay gap by contract?"
+        ]
+      },
+      {
+        "question": [
+          "Which lanes have the lowest days to zero?"
+        ]
+      },
+      {
+        "question": [
+          "What is the operating margin by asset this month?"
+        ]
+      }
+    ]
+  },
+  "data_sources": {
+    "metric_views": [
+      {
+        "identifier": "demos.industrials_optimization.consumption_metrics"
+      },
+      {
+        "identifier": "demos.industrials_optimization.contract_metrics"
+      },
+      {
+        "identifier": "demos.industrials_optimization.production_metrics"
+      },
+      {
+        "identifier": "demos.industrials_optimization.financial_metrics"
+      },
+      {
+        "identifier": "demos.industrials_optimization.forecast_metrics"
+      },
+      {
+        "identifier": "demos.industrials_optimization.profitability_metrics"
+      }
+    ]
+  }
+}

@@ -1,0 +1,144 @@
+/* Additional app-specific styles */
+.maplibregl-map {
+  font-family: inherit;
+}
+
+.maplibregl-ctrl-group {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+}
+
+.maplibregl-ctrl button {
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
+}
+
+.maplibregl-ctrl button:hover {
+  background: hsl(var(--accent));
+}
+
+.deck-tooltip {
+  font-family: inherit;
+  background: hsl(var(--popover));
+  color: hsl(var(--popover-foreground));
+  padding: 8px 12px;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+/* Agent chat markdown rendering */
+.agent-markdown {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.agent-markdown p {
+  margin: 0.25em 0;
+}
+
+.agent-markdown p:first-child {
+  margin-top: 0;
+}
+
+.agent-markdown p:last-child {
+  margin-bottom: 0;
+}
+
+.agent-markdown strong {
+  font-weight: 600;
+}
+
+.agent-markdown em {
+  font-style: italic;
+}
+
+.agent-markdown ul,
+.agent-markdown ol {
+  margin: 0.35em 0;
+  padding-left: 1.25em;
+}
+
+.agent-markdown li {
+  margin: 0.15em 0;
+}
+
+.agent-markdown li::marker {
+  color: hsl(var(--muted-foreground));
+}
+
+.agent-markdown h1,
+.agent-markdown h2,
+.agent-markdown h3,
+.agent-markdown h4 {
+  font-weight: 600;
+  margin: 0.5em 0 0.25em;
+  line-height: 1.3;
+}
+
+.agent-markdown h1 { font-size: 1.05em; }
+.agent-markdown h2 { font-size: 0.95em; }
+.agent-markdown h3 { font-size: 0.9em; }
+.agent-markdown h4 { font-size: 0.85em; }
+
+.agent-markdown code {
+  background: hsl(var(--muted));
+  padding: 0.15em 0.35em;
+  border-radius: 3px;
+  font-size: 0.85em;
+}
+
+.agent-markdown pre {
+  background: hsl(var(--muted));
+  padding: 0.5em 0.75em;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 0.35em 0;
+}
+
+.agent-markdown pre code {
+  background: none;
+  padding: 0;
+}
+
+.agent-markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.4em 0;
+  font-size: 0.8em;
+}
+
+.agent-markdown th,
+.agent-markdown td {
+  border: 1px solid hsl(var(--border));
+  padding: 0.3em 0.5em;
+  text-align: left;
+}
+
+.agent-markdown th {
+  background: hsl(var(--muted));
+  font-weight: 600;
+}
+
+.agent-markdown tr:nth-child(even) {
+  background: hsl(var(--muted) / 0.3);
+}
+
+.agent-markdown blockquote {
+  border-left: 3px solid hsl(var(--border));
+  padding-left: 0.75em;
+  margin: 0.35em 0;
+  color: hsl(var(--muted-foreground));
+}
+
+.agent-markdown hr {
+  border: none;
+  border-top: 1px solid hsl(var(--border));
+  margin: 0.5em 0;
+}
+
+.agent-markdown a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+}

@@ -1,0 +1,29 @@
+# Databricks App Configuration
+# This app has a React frontend and a Python FastAPI backend
+# Following the pattern from: https://www.databricks.com/blog/building-databricks-apps-react-and-mosaic-ai-agents-enterprise-chat-solutions
+
+# Command to start the application using Gunicorn with Uvicorn workers
+# First build the frontend, then start the backend which serves both API and static files
+command:
+  - "sh"
+  - "-c"
+  - |
+    pip install -r requirements.txt && \
+    npm install && \
+    npm run build && \
+    gunicorn backend.main:app -w 2 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
+
+# Environment variables
+# Use valueFrom to reference resources (SQL warehouse, secrets) defined in the Apps UI.
+# See: https://docs.databricks.com/aws/en/dev-tools/databricks-apps/environment-variables#access-resources
+env:
+  - name: NODE_ENV
+    value: production
+  - name: VITE_BACKEND_URL
+    value: /api
+  - name: DATABRICKS_SQL_WAREHOUSE_ID
+    valueFrom: sql-warehouse
+  - name: DATABRICKS_LLM_ENDPOINT_NAME
+    valueFrom: serving-endpoint
+  - name: DATABRICKS_GENIE_SPACE_ID
+    valueFrom: genie-space

@@ -1,0 +1,10 @@
+# Databricks Connect 17.3 LTS - requires Python 3.12
+databricks-connect==17.3.*
+databricks-sdk>=0.40.0
+dbldatagen
+faker
+jmespath
+networkx
+numpy
+pandas
+pyparsing
